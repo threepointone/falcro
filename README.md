@@ -1,7 +1,7 @@
 falcro
 ---
 
-(work in progress)
+(super early work in progress, open to feedback)
 
 "inspiration"
 ---

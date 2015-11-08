@@ -46,7 +46,7 @@ class Search extends Component{
     // similar to om.next/set-params!
     this.props.falcro.setParams({
       userId: e.target.value
-    }, () => this.props.refresh()); // trigger a sync for dynamic data
+    }, true); // trigger a sync for dynamic data
   }
   render(){
     return <div>

@@ -1,0 +1,46 @@
+{
+  "name": "falcro",
+  "version": "1.0.0",
+  "description": "react + falcor",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "babel-node webpack/server",
+    "build": "NODE_ENV=production babel src -d lib"
+  },
+  "keywords": [
+    "falcor",
+    "react"
+  ],
+  "author": "Sunil Pai <threepointone@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "babel-runtime": "^5.8.29"
+  },
+  "devDependencies": {
+    "babel": "^5.8.29",
+    "babel-eslint": "^4.1.4",
+    "babel-loader": "^5.3.3",
+    "babel-plugin-react-transform": "^1.1.1",
+    "eslint": "^1.9.0",
+    "eslint-plugin-react": "^3.8.0",
+    "express": "^4.13.3",
+    "falcor": "^0.1.14",
+    "falcor-http-datasource": "^0.1.2",
+    "falcor-path-syntax": "^0.2.4",
+    "falcor-router": "^0.2.11",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "react-transform-catch-errors": "^1.0.0",
+    "react-transform-hmr": "^1.0.1",
+    "redbox-react": "^1.1.1",
+    "superagent": "^1.4.0",
+    "webpack": "^1.12.3",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.4.1"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "falcor": "*"
+  }
+}

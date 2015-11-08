@@ -70,9 +70,9 @@ passed down in `props`
 - `params` - the params that were used for the query
 - `loading` - true/false whether a fetch is in flight
 - `falcro`
--- `.set(path, value)` - send a mutation to the model
--- `.refresh()` - triggers a fetch/sync
--- `.setParams(params, refresh = false)` - change the params for the current query, and optionally trigger a fetch
+  - `.set(path, value)` - send a mutation to the model
+  - `.refresh()` - triggers a fetch/sync
+  - `.setParams(params, refresh = false)` - change the params for the current query, and optionally trigger a fetch
 
 
 

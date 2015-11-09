@@ -28,10 +28,8 @@ const cache = {
 // "declare" what the component wants
 @connect({query: () => ['count']})
 class Counter extends Component{
-
   onClick = () =>
     this.props.falcro.set('count', this.props.count + 1)
-
   render(){
     return <div onClick={this.onClick}>
       clicked {this.props.count} times

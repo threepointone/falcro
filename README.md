@@ -73,6 +73,11 @@ passed down in `props`
   - `.setParams(params, refresh = false)` - change the params for the current query, and optionally trigger a fetch
 
 
+examples
+---
+
+use [react-heatpack](https://github.com/insin/react-heatpack) to run examples from `/examples` directory
+
 
 todo
 ---

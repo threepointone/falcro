@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha",
-    "start": "babel-node webpack/server",
-    "build": "NODE_ENV=production babel src -d lib"
+    "build": "NODE_ENV=production babel src -d lib",
+    "sandbox": "babel-node sandbox"
   },
   "keywords": [
     "falcor",
@@ -34,10 +34,7 @@
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.1.1",
-    "superagent": "^1.4.0",
-    "webpack": "^1.12.3",
-    "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.4.1"
+    "superagent": "^1.4.0"
   },
   "peerDependencies": {
     "react": "*",

@@ -2,7 +2,7 @@
 
 import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
-import {app, connect, Provider} from '../../src';
+import {app, connect, Provider} from '../src';
 import {Model} from 'falcor';
 
 // "declare" what the component wants
@@ -41,6 +41,6 @@ class App extends Component{
 // start it up
 app({cache: { count: 0 }},  // model options
   model =>  // render on every 'change'
-    render(<App model={model}/>, document.getElementById('root')));
+    render(<App model={model}/>, document.getElementById('app')));
 
 

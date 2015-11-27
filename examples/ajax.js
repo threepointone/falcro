@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {render} from 'react-dom';
-import {app, connect, Provider} from '../../src';
+import ReactDOM from 'react-dom';
+import {app, connect, Provider} from '../src';
 import Router from 'falcor-router';
 import request from 'superagent';
 
@@ -69,6 +69,4 @@ class Search extends Component{
 
 // start it up
 app({cache: {input: ''}, source},
-  model => render(<App model={model}/>, document.getElementById('root')));
-
-
+  model => ReactDOM.render(<App model={model}/>, document.getElementById('app')));

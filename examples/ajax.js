@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {app, connect, Provider} from '../src';
+import {render} from 'react-dom';
+import {root, connect} from '../src';
 import Router from 'falcor-router';
 import request from 'superagent';
+import ErrorD from './Error';
 
 // a 'service' that fetches user details from github
 function user(id){
@@ -24,11 +25,10 @@ const source = new Router([{
   }
 }]);
 
+@root({cache: {input: ''}, source})
 class App extends Component{
   render(){
-    return <Provider model={this.props.model}>
-      <Search />
-    </Provider>;
+    return <Search />;
   }
 }
 
@@ -58,15 +58,10 @@ class Search extends Component{
         JSON.stringify(this.props.users, null, ' ')
       }</pre> : null}
 
-
-      {this.props.error ?
-        <pre style={{color:'red'}}>{JSON.stringify(this.props.error.stack || this.props.error)}</pre> :
-        null}
-
+      <ErrorD error={this.props.error}/>
     </div>;
   }
 }
 
 // start it up
-app({cache: {input: ''}, source},
-  model => ReactDOM.render(<App model={model}/>, document.getElementById('app')));
+render(<App />, document.getElementById('app'));

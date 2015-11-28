@@ -1,4 +1,4 @@
-import {Component, PropTypes, Children, createElement} from 'react';
+import React, {Component, PropTypes, Children, createElement} from 'react';
 import {Model} from 'falcor';
 
 function log(){
@@ -110,46 +110,43 @@ export function connect({
   };
 }
 
+export function root(options){
+  return function(Target){
+    return class FalcroRoot extends Component{
+      static displayName =  `∏:${Target.displayName}`
 
-export class Provider extends Component{
-  static propTypes = {
-    model: PropTypes.instanceOf(Model).isRequired,
-    children: PropTypes.element.isRequired
-  }
+      static childContextTypes = {
+        falcor: PropTypes.instanceOf(Model).isRequired
+      }
 
-  static childContextTypes = {
-    falcor: PropTypes.instanceOf(Model).isRequired
-  }
+      getChildContext() {
+        return { falcor: this.state.model };
+      }
 
-  getChildContext() {
-    return { falcor: this.props.model };
-  }
-
-  render(){
-    return Children.only(this.props.children);
-  }
+      state = {
+        model: (() => {
+          // this weirdness because Model::onChange fires immediately *while* initializing
+          // leaving model still undefined, however will try to trigger a render where you'll
+          // have to pass it down... it's a mess
+          // will think aof a better solution later, this is good for now
+          let started = false;
+          const onChange = () => {
+            if (started){
+              this.onChange();
+            }
+            started = true;
+          };
+          return new Model({...options, onChange}).batch();
+        })()
+      }
+      onChange = () => {
+        // todo - check for deep updates
+        this.forceUpdate();
+      }
+      render(){
+        return <Target {...this.props} />;
+      }
+    };
+  };
 }
-
-// this boilerplate needed to 'hoist' control to the top
-export function app(options, then){
-  if (typeof options === 'function'){
-    return app({}, options);
-  }
-  // this weirdness because Model::onChange fires immediately *while* initializing
-  // leaving model still undefined, however will try to trigger a render where you'll
-  // have to pass it down... it's a mess
-  // will think aof a better solution later, this is good for now
-  let started = false, model;
-  function onChange(){
-    if (started){
-      then(model);
-    }
-    started = true;
-  }
-  model = new Model({...options, onChange}).batch();
-  onChange();
-}
-
-
-
 

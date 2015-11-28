@@ -19,11 +19,16 @@ counter
 ```jsx
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import {app, connect, Provider} from 'falcro';
+import {root, connect} from 'falcro';
 
-const cache = {
-  count: 0
-};
+
+// "root" component, every app will have one
+@root({cache: {count: 0}})
+class App extends Component{
+  render(){
+    return <Counter />;
+  }
+}
 
 // "declare" what the component wants
 @connect({query: () => ['count']})
@@ -38,11 +43,13 @@ class Counter extends Component{
 }
 
 // start it up
-app({cache}, model =>
-  render(<Provider model={model}>
-    <Counter />
-  </Provider>, document.getElementById('root')));
+render(<App/>, document.getElementById('app'));
 ```
+
+root(modelOptions)
+---
+
+corresponding to [falcor's Model options](https://netflix.github.io/falcor/doc/Model.html)
 
 connect(options)
 ---

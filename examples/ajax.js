@@ -4,6 +4,7 @@ import {root, connect} from '../src';
 import Router from 'falcor-router';
 import request from 'superagent';
 import ErrorD from './Error';
+import Stringify from './Stringify';
 
 // a 'service' that fetches user details from github
 function user(id){
@@ -13,7 +14,6 @@ function user(id){
     request.get(`https://api.github.com/users/${id}`).end((err, res) =>
       err ? reject(err) : resolve(res.body)));
 }
-
 
 // "remotes"
 const source = new Router([{
@@ -25,16 +25,12 @@ const source = new Router([{
   }
 }]);
 
-@root({cache: {input: ''}, source})
-class App extends Component{
-  render(){
-    return <Search />;
-  }
-}
 
+@root({cache: {input: ''}, source})
 @connect({
   params: { userId: 'octocat' },
-  query: ({userId}) => [ `input`, `users['${userId}']['login', 'name', 'email', 'avatar_url']`]})
+  query: ({userId}) => [ `input`, `users['${userId}']['login', 'name', 'email', 'avatar_url']`]
+})
 class Search extends Component{
   onChange = e => {
     // sends a mutation
@@ -54,9 +50,9 @@ class Search extends Component{
       name: {this.props.params.userId} <br/>
 
       {/* spinner */ this.props.loading ? 'loading...' : <br/>}
-      {/* data */ !this.props.loading ? <pre>{
-        JSON.stringify(this.props.users, null, ' ')
-      }</pre> : null}
+      {/* data */ !this.props.loading ?
+        <Stringify data={this.props.users}/> :
+      null}
 
       <ErrorD error={this.props.error}/>
     </div>;
@@ -64,4 +60,4 @@ class Search extends Component{
 }
 
 // start it up
-render(<App />, document.getElementById('app'));
+render(<Search />, document.getElementById('app'));

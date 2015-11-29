@@ -110,10 +110,12 @@ export function connect({
   };
 }
 
+
+
 export function root(options){
   return function(Target){
     return class FalcroRoot extends Component{
-      static displayName =  `∏:${Target.displayName}`
+      static displayName =  `π:${Target.displayName}`
 
       static childContextTypes = {
         falcor: PropTypes.instanceOf(Model).isRequired
@@ -128,7 +130,7 @@ export function root(options){
           // this weirdness because Model::onChange fires immediately *while* initializing
           // leaving model still undefined, however will try to trigger a render where you'll
           // have to pass it down... it's a mess
-          // will think aof a better solution later, this is good for now
+          // will think of a better solution later, this is good for now
           let started = false;
           const onChange = () => {
             if (started){
@@ -144,7 +146,9 @@ export function root(options){
         this.forceUpdate();
       }
       render(){
-        return <Target {...this.props} />;
+        return <Target {...this.props}>
+          {this.props.children}
+        </Target>;
       }
     };
   };

@@ -59,9 +59,12 @@ export function connect({
 
       // the next 3 are passed down in `props.<actionsKey>`
 
-      set = (...args) => {
+      set = (path, value, remote = false) => {
         // todo - .set instead of setValue?
-        this.context.falcor.withoutDataSource().setValue(...args).subscribe(()=>{}, ::console.error, ()=>{});
+        (remote ? this.context.falcor : this.context.falcor.withoutDataSource()).setValue(path, value).subscribe(()=>{}, ::console.error, ()=>{});
+      }
+      callFn = (path, args, refPaths, thisPaths) => {
+        this.context.falcor.call(path, args).subscribe(()=>{}, ::console.error, ()=>{});
       }
 
       setParams = (p, refresh = false) => {
@@ -94,7 +97,8 @@ export function connect({
       actions = {
         set: this.set,
         refresh: this.refresh,
-        setParams: this.setParams
+        setParams: this.setParams,
+        fn: this.callFn
       }
 
       render(){

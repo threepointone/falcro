@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 
 export default class ErrorD extends Component{
   static propTypes = {
-    error: PropTypes.object
+    // error: PropTypes.object
   }
   render(){
     let {error} = this.props;

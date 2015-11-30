@@ -76,18 +76,11 @@ const getId = (() => {
       let newId = getId();
       let todo = {id: newId, text: args[0], done: false};
       TODOS.push(todo);
-      return {paths: []};
-      // return {
-      //   paths: [
-      //     ['byId', newId]
-      //   ],
-      //   jsonGraph:{
-      //     byId: {
-      //       [newId]: todo
-      //     }
-      //   },
-      //   invalidated: []
-      // };
+      // return {};
+      return [{path: ['byId', newId, 'text'], value: todo.text },
+      {path: ['byId', newId, 'done'], value: todo.done },
+      {path: ['byId', newId, 'id'], value: todo.id },
+      {path:['todos', ['all', 'completed', 'active']], invalidated: true}];
     }
   }])
 })
@@ -106,7 +99,7 @@ class App extends Component{
 
     let value = this.props.input;
     if (e.keyCode === 13 && value.length > 2){
-      this.props.falcro.fn(`todos.add`, [value]);
+      this.props.falcro.fn(['todos', 'add'], [value]);
     }
 
   }

@@ -63,8 +63,8 @@ export function connect({
         // todo - .set instead of setValue?
         (remote ? this.context.falcor : this.context.falcor.withoutDataSource()).setValue(path, value).subscribe(()=>{}, ::console.error, ()=>{});
       }
-      callFn = (path, args, refPaths, thisPaths) => {
-        this.context.falcor.call(path, args).subscribe(()=>{}, ::console.error, ()=>{});
+      callFn = (path, args, refPaths = [], thisPaths = [], refresh = true) => {
+        this.context.falcor.call(path, args, refPaths, thisPaths).subscribe(()=>refresh ? this.refresh() : null, ::console.error, ()=>{});
       }
 
       setParams = (p, refresh = false) => {

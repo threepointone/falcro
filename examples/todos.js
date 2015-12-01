@@ -77,10 +77,7 @@ const getId = (() => {
       let todo = {id: newId, text: args[0], done: false};
       TODOS.push(todo);
       // return {};
-      return [{path: ['byId', newId, 'text'], value: todo.text },
-      {path: ['byId', newId, 'done'], value: todo.done },
-      {path: ['byId', newId, 'id'], value: todo.id },
-      {path:['todos', ['all', 'completed', 'active']], invalidated: true}];
+      return [{path: ['todos', ['all', 'completed', 'active'], newId], value: {$type: 'ref', value: ['byId', newId]}}];
     }
   }])
 })

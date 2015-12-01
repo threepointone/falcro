@@ -1,8 +1,8 @@
 import React, {Component, PropTypes, Children, createElement} from 'react';
 import {Model} from 'falcor';
 
-function log(){
-  console.log(this);
+function log(msg = this){
+  console.log(msg);
   return this;
 }
 

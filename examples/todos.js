@@ -11,7 +11,7 @@ function log(){
 }
 
 
-const TODOS = [
+var TODOS = [
   {id: 0, text: 'haircut', done: true},
   {id: 1, text: 'shave', done: true},
   {id: 2, text: 'job', done: false}
@@ -76,7 +76,39 @@ const getId = (() => {
       let newId = getId();
       let todo = {id: newId, text: args[0], done: false};
       TODOS.push(todo);
-      return [{path: ['todos', ['all', 'completed', 'active'], newId], value: {$type: 'ref', value: ['byId', newId]}}];
+
+      return [
+        {path: 'input', value: ''},
+        {path: ['todos', ['all', 'completed', 'active'], newId], value: {$type: 'ref', value: ['byId', newId]}}
+      ];
+    }
+  },{
+    route: 'todos.remove',
+    call(path, args){
+
+      let id = args[0];
+      TODOS = TODOS.filter(x => x.id !== id);
+      return [
+        {path: ['byId', id], value: {$type: 'atom'}}
+      ];
+    }
+  },{
+    route: 'todos.toggle',
+    call(path, args){
+      let id = args[0];
+      let todo = getById(id);
+      todo.done = !todo.done;
+      return [
+        {path: ['todos', ['all', 'completed', 'active']], invalidated: true},
+        {path: ['byId', id, 'done'], value: todo.done},
+      ];
+    }
+  },{
+    route: 'todos.clearCompleted',
+    call(path, args){
+      let ret = TODOS.filter(x => x.done).map(todo => ({path: ['byId', todo.id], value: {$type: 'atom'}}));
+      TODOS = TODOS.filter(x => !x.done);
+      return ret;
     }
   }])
 })
@@ -92,27 +124,25 @@ class App extends Component{
     this.props.falcro.refresh();
   }
   onKeyDown = e => {
-
     let value = this.props.input;
     if (e.keyCode === 13 && value.length > 2){
       this.props.falcro.fn(['todos', 'add'], [value]);
     }
-
   }
   onChange = e => {
     this.props.falcro.set('input', e.target.value);
   }
   onRemove = id => {
-    this.props.falcro.call('remove', id);
+    this.props.falcro.fn(['todos', 'remove'], [id]);
   }
   onToggle = id => {
-
+    this.props.falcro.fn(['todos', 'toggle'], [id]);
   }
   select = type => {
     this.props.falcro.setParams({selected: type}, true);
   }
   clearCompleted = () => {
-    this.props.falcro.call('clear');
+    this.props.falcro.fn(['todos', 'clearCompleted']);
   }
 
   render(){

@@ -97,7 +97,7 @@ const getId = (() => {
     call(path, args){
       let id = args[0];
       let todo = getById(id);
-      todo.done = !todo.done;
+      todo.done = !(todo.done);
       return [
         {path: ['todos', ['all', 'completed', 'active']], invalidated: true},
         {path: ['byId', id, 'done'], value: todo.done},

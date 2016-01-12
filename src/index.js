@@ -167,3 +167,14 @@ export class Model extends falcor.Model{
 }
 
 export class Router extends FRouter{}
+
+export function routeByCollectionId(key, fetch){
+  return {
+    route:`${key}[{keys:ids}]`,
+    get: async function (pathSet){
+      let responses = await Promise.all(pathSet.ids.map(fetch));
+      return pathSet.ids.map((id, i) =>
+          ({path: [key, id],  value: responses[i]}));
+    }
+  };
+}

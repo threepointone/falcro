@@ -25,7 +25,8 @@ render(){
 
 // and then fetch anywhere in your app
 <Get query={`{ users { ${name} } }`}>{
-  ({users, error, loading, $ : {setValue, refresh, call }}) => <div>{...}</div>
+  ({users, error, loading, $ : {setValue, refresh, call }}) =>
+    <div>{...}</div>
 }</Get>
 
 
@@ -51,7 +52,7 @@ Get
   - ...value - ie, the result of the query
   - error - if errored
   - loading - _true_ if a request is in flight
-  - $ - actions on the model instance - _setValue_, _call_, and _refresh_
+  - $ - actions on the model instance - _setValue_, _call_, and _refresh_ (more to come)
 
 examples
 ---

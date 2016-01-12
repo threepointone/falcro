@@ -11,7 +11,7 @@ export async function renderToString(el, model){
   let queries = [...model.queries.values()];
   model.stopCaching();
 
-  // then, we make a fetch actual datasources, to prime the model cache
+  // then, we make a regular fetch to prime the model cache
   await model.get(...queries);
 
   // and finally render to string

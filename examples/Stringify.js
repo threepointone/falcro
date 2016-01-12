@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class Stringify extends Component{
-  render(){
-    return <pre>{
-      JSON.stringify(this.props.data, null, ' ')
-    }</pre>;
-  }
+export default function Stringify({data}){
+  return <pre>{
+    JSON.stringify(data, null, ' ')
+  }</pre>;
 }
+

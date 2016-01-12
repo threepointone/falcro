@@ -1,19 +1,23 @@
-// simplest get / set state example
-
-import React, {Component} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
-import {root, connect} from '../src';
+import {Root, Get, Model} from '../src';
 
-@root({cache: { count: 0 }})
-@connect({query: () => ['count']})
-class Counter extends Component{
-  onClick = () => // send a mutation on click
-    this.props.falcro.set('count', this.props.count + 1)
-  render(){
-    return <div onClick={this.onClick}>
-      clicked {this.props.count} times
-    </div>;
-  }
+let model = new Model({cache: {count: 0}});
+
+function App(){
+  return <Root model={model}>
+    <Counter/>
+  </Root>;
 }
 
-render(<Counter/>, document.getElementById('app'));
+function Counter(){
+  return <Get query='count'>{
+    ({count, $}) =>
+      <div onClick={()=> $.setValue('count', count + 1)}>
+        clicked {count} times
+      </div>
+  }</Get>;
+}
+
+render(<App/>, document.getElementById('app'));
+

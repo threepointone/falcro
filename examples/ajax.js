@@ -1,10 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
-import {root, connect} from '../src';
-import Router from 'falcor-router';
+import {Root, Get, Model, Router} from '../src';
 import request from 'superagent';
-import ErrorD from './Error';
-import Stringify from './Stringify';
 
 // a 'service' that fetches user details from github
 function user(id){
@@ -14,6 +11,8 @@ function user(id){
     request.get(`https://api.github.com/users/${id}`).end((err, res) =>
       err ? reject(err) : resolve(res.body)));
 }
+
+// and another that gets repos for a user
 
 // "remotes"
 const source = new Router([{
@@ -25,39 +24,32 @@ const source = new Router([{
   }
 }]);
 
+let model = new Model({
+  cache: {input: 'octocat'},
+  source
+});
 
-@root({cache: {input: ''}, source})
-@connect({
-  params: { userId: 'octocat' },
-  query: ({userId}) => [ `input`, `users['${userId}']['login', 'name', 'email', 'avatar_url']`]
-})
-class Search extends Component{
-  onChange = e => {
-    // sends a mutation
-    this.props.falcro.set('input', e.target.value);
-
-    // params are different from props
-    // in that they're 'local' to the component
-    // and only passed to the query fn
-    // similar to om.next/set-params!
-    this.props.falcro.setParams({
-      userId: e.target.value
-    }, true); // trigger a sync for dynamic data
-  }
-  render(){
-    return <div>
-      <input value={this.props.input} onChange={this.onChange} /> <br/>
-      name: {this.props.params.userId} <br/>
-
-      {/* spinner */ this.props.loading ? 'loading...' : <br/>}
-      {/* data */ !this.props.loading ?
-        <Stringify data={this.props.users}/> :
-      null}
-
-      <ErrorD error={this.props.error}/>
-    </div>;
-  }
+export function App(){
+  return <Root model={model}>
+    <Search/>
+  </Root>;
 }
 
-// start it up
-render(<Search />, document.getElementById('app'));
+function Search(){
+  return <Get query='input'>{
+    ({input, $}) =>
+      <div>
+        <input value={input} onChange={e => $.setValue('input', e.target.value)}/>
+        <Get query={`users.${input}['avatar_url', 'name']`}>{
+          ({users, loading}) =>
+            <div>
+              {loading ? 'loading...' : null}
+              <pre>{JSON.stringify(users)}</pre>
+            </div>
+        }</Get>
+      </div>
+  }</Get>;
+}
+
+// render(<App/>, document.getElementById('app'));
+

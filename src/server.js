@@ -1,12 +1,20 @@
 import ReactDOMServer from 'react-dom/server';
 
 export async function renderToString(el, model){
-  // todo - recurse until queries doesn't change
-  model.__caching__ = true;
+  // start caching queries on the model
+  model.startCaching();
+
+  // we render to string once so the model gets primed with all the queries it would have received
   ReactDOMServer.renderToString(el);
-  model.__caching__ = false;
-  let q = [...model.queries.values()];
-  model.queries = new Set();
-  await model.get(...q);
+
+
+  let queries = [...model.queries.values()];
+  model.stopCaching();
+
+  // then, we make a fetch actual datasources, to prime the model cache
+  await model.get(...queries);
+
+  // and finally render to string
   return ReactDOMServer.renderToString(el);
 }
+  // todo - recurse until queries doesn't change

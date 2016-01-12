@@ -1,5 +1,4 @@
 import {Component, PropTypes} from 'react';
-
 import falcor from 'falcor';
 import FRouter from 'falcor-router';
 
@@ -8,6 +7,9 @@ function log(msg = this){
   return this;
 }
 
+// synchronous `get` operation on a model (bypasses datasources)
+// `let response = model::get(paths);`
+// throws on error
 function get(paths){
   paths = paths.filter(p => p.trim());
 
@@ -25,6 +27,8 @@ function get(paths){
   return value;
 }
 
+// asynchronous get on the model
+// accepts a callback
 function aget(paths, done){
   paths = paths.filter(p => p.trim());
 
@@ -34,12 +38,14 @@ function aget(paths, done){
       res => value = res.json,
       err => error = err,
       () => done(error, value) /* noop*/);
-
 }
 
 
-
+// 'Get' as a component
 export class Get extends Component{
+  static propTypes = {
+    query: PropTypes.string.isRequired
+  }
 
   static contextTypes = {
     falcor: PropTypes.instanceOf(falcor.Model).isRequired,
@@ -54,7 +60,7 @@ export class Get extends Component{
     loading: false
   }
 
-  // the next 3 are passed down in `props.<actionsKey>`
+  // the next 3 are passed down in `$`
 
   setValue = (path, value, remote = false) => {
     // todo - .set instead of setValue?
@@ -161,6 +167,13 @@ export class Model extends falcor.Model{
       }
       _started = true;
     }});
+  }
+  startCaching(){
+    this.__caching__ = true;
+  }
+  stopCaching(){
+    this.__caching__ = false;
+    this.queries = new Set();
   }
   cacheQuery(q){
     if (this.__caching__){

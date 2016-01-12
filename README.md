@@ -50,7 +50,6 @@ Get
 ---
 
 - query - falcor model query. accepts [falcor-path-syntax](https://www.npmjs.com/package/falcor-path-syntax) or [falcor-graph-syntax](https://www.npmjs.com/package/falcor-graph-syntax)
-- onNext/onDone - callbacks, optional
 - children - a function, that will receive, on render -
   - ...value - ie, the result of the query
   - error - if errored

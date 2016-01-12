@@ -25,7 +25,8 @@ function App(){
 // and then fetch anywhere in your app
 function User({name}){
   return <Get query={`users.${name}['avatar_url', 'id']`}>{
-    ({users, error, loading, $: {setValue, refresh, call}}) =>
+    ({users, error, loading}}) => loading ?
+      <div>loading...</div> :
       <img src={users[name].avatar_url} alt={users[name].id} />
   }</Get>;
 }

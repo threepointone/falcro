@@ -1,36 +1,39 @@
 falcro
 ---
 
+[work in progress]
+
 falcor as a component
 
-`npm install falcro falcor --save`
+`npm install react falcor falcro --save`
 
 
 ```jsx
-
 // instantiate a model, matching paths to data sources
 let model = new Model({
   cache: {...},
   source: new Router([...])
 });
 
-
 // include the Root component somewhere up in your component hierarchy
-render(){
+function App(){
   return <Root model={model}>
-    <App/>
+    <User name='threepointone' />
   </Root>;
 }
 
-
 // and then fetch anywhere in your app
-<Get query={`{ users { ${name} } }`}>{
-  ({users, error, loading, $ : {setValue, refresh, call }}) =>
-    <div>{...}</div>
-}</Get>
+function User({name}){
+  return <Get query={`users.${name}['avatar_url', 'id']`}>{
+    ({users, error, loading, $: {setValue, refresh, call}}) =>
+      <img src={users[name].avatar_url} alt={users[name].id} />
+  }</Get>;
+}
 
+// all the falcor goodies for free - batching, caching, .set/.call, etc
 
-// all the falcor goodies for free - batching, caching, etc
+//BONUS - server side async rendering
+renderToString(<App/>, model).then(html => res.send(html))
 ```
 
 Model
@@ -48,11 +51,17 @@ Get
 
 - query - falcor model query. accepts [falcor-path-syntax](https://www.npmjs.com/package/falcor-path-syntax) or [falcor-graph-syntax](https://www.npmjs.com/package/falcor-graph-syntax)
 - onNext/onDone - callbacks, optional
-- children - a function, that will receive -
+- children - a function, that will receive, on render -
   - ...value - ie, the result of the query
   - error - if errored
   - loading - _true_ if a request is in flight
   - $ - actions on the model instance - _setValue_, _call_, and _refresh_ (more to come)
+
+renderToString(element, model)
+---
+
+ - returns a promise, which resolves to the html
+
 
 examples
 ---
@@ -67,7 +76,8 @@ todo
 - refreshing *only* the components that change
 - streaming results
 - server side rendering
-- redux scenarios (reduce/rewind/replay/etc)
+- redux/router scenarios (reduce/rewind/replay/etc)
+- shallow render testing
 - idents
 - derefs
 - etc etc

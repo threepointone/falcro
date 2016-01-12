@@ -28,6 +28,7 @@
     "falcor-http-datasource": "^0.1.2",
     "falcor-path-syntax": "^0.2.4",
     "falcor-router": "^0.2.12",
+    "isomorphic-fetch": "^2.2.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "superagent": "^1.6.1"

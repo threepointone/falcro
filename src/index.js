@@ -1,4 +1,5 @@
 import {Component, PropTypes} from 'react';
+
 import falcor from 'falcor';
 import FRouter from 'falcor-router';
 
@@ -9,7 +10,6 @@ function log(msg = this){
 
 function get(paths){
   paths = paths.filter(p => p.trim());
-  console.log('paths', paths);
 
   let value, error;
   this.withoutDataSource()
@@ -87,6 +87,7 @@ export class Get extends Component{
   }
   getValue(){
     try {
+      this.context.falcor.cacheQuery(this.props.query);
       return this.context.falcor::get([this.props.query]);
     }
     catch (error){
@@ -124,7 +125,7 @@ export class Root extends Component{
       ƒunregister: this.unregister
     };
   }
-  componentWillMount(){
+  componentDidMount(){
     this.modelChange$ = this.props.model.listen(() =>
       this.components.forEach(c => c.refresh())
     );
@@ -147,8 +148,9 @@ export class Root extends Component{
 
 
 export class Model extends falcor.Model{
-  started = false;
   handlers = [];
+  queries = new Set();
+  __caching__ = false
   constructor(options){
     let _change = options.onChange || () => {};
     let _started = false;
@@ -160,6 +162,12 @@ export class Model extends falcor.Model{
       _started = true;
     }});
   }
+  cacheQuery(q){
+    if (this.__caching__){
+      this.queries.add(q);
+    }
+  }
+
   listen(fn){
     this.handlers.push(fn);
     return {dispose: ()=> this.handlers = this.handlers.filter(fn)};

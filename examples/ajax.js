@@ -2,7 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import Router from 'falcor-router';
 import {Root, Get, Model, routeByCollectionId} from '../src';
-import {renderToString} from '../src/server';
+// import {renderToString} from '../src/server';
 
 import 'isomorphic-fetch';
 
@@ -32,16 +32,16 @@ function Search(){
           ({users, loading}) =>
             <div>
               {loading ? 'loading...' : null}
-              <pre>{JSON.stringify(users)}</pre>
+              <pre>{JSON.stringify(users, null, ' ')}</pre>
             </div>
         }</Get>
       </div>
   }</Get>;
 }
 
-// render(<App/>, document.getElementById('app'));
+render(<App/>, document.getElementById('app'));
 
 
-renderToString(<App/>, model).then(::console.log);
+// renderToString(<App/>, model).then(::console.log);
 
 

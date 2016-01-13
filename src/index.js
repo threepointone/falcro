@@ -1,6 +1,5 @@
 import {Component, PropTypes} from 'react';
 import falcor from 'falcor';
-import FRouter from 'falcor-router';
 
 function log(msg = this){
   console.log(msg);
@@ -45,20 +44,20 @@ function aget(paths, done){
 export class Get extends Component{
   static propTypes = {
     query: PropTypes.string.isRequired
-  }
+  };
 
   static contextTypes = {
     falcor: PropTypes.instanceOf(falcor.Model).isRequired,
     ƒregister: PropTypes.func,
     ƒunregister: PropTypes.func
-  }
+  };
 
   // these 2 should be pulled out via an 'indexer' ala om next
   // else we won't have replay
   // for now though, could work
   state = {
     loading: false
-  }
+  };
 
   // the next 3 are passed down in `$`
 
@@ -66,10 +65,10 @@ export class Get extends Component{
     // todo - .set instead of setValue?
     let f = remote ? this.context.falcor : this.context.falcor.withoutDataSource();
     f.setValue(path, value).subscribe(()=>{}, ::console.error, ()=>{});
-  }
+  };
   call = (path, args, refPaths = [], thisPaths = [], refresh = true) => {
     this.context.falcor.call(path, args, refPaths, thisPaths).subscribe(()=>refresh ? this.refresh() : null, ::console.error, ()=>{});
-  }
+  };
 
 
   refresh = (props = this.props) => {
@@ -78,7 +77,7 @@ export class Get extends Component{
     // this should silently trigger the update
     this.context.falcor::aget([props.query], () => this.setState({loading: false}));
 
-  }
+  };
   componentWillMount(){
     this.context.ƒregister(this);
   }
@@ -105,7 +104,7 @@ export class Get extends Component{
     setValue: this.setValue,
     refresh: this.refresh,
     call: this.call
-  }
+  };
 
   render(){
     return this.props.children({
@@ -118,11 +117,14 @@ export class Get extends Component{
 
 
 export class Root extends Component{
+  static propTypes = {
+    model: PropTypes.instanceOf(falcor.Model).isRequired
+  };
   static childContextTypes = {
     falcor: PropTypes.instanceOf(falcor.Model).isRequired,
     ƒregister: PropTypes.func,
     ƒunregister: PropTypes.func
-  }
+  };
 
   getChildContext() {
     return {
@@ -140,13 +142,13 @@ export class Root extends Component{
     this.modelChange$.dispose();
     delete this.modelChange;
   }
-  components = []
-  register = (c) => {
+  components = [];
+  register = c => {
     this.components.push(c);
-  }
-  unregister = (c) => {
+  };
+  unregister = c => {
     this.components = this.components.filter(x => x !== c);
-  }
+  };
   render(){
     return this.props.children;
   }
@@ -156,9 +158,9 @@ export class Root extends Component{
 export class Model extends falcor.Model{
   handlers = [];
   queries = new Set();
-  __caching__ = false
+  __caching__ = false;
   constructor(options){
-    let _change = options.onChange || () => {};
+    let _change = options.onChange || (() => {});
     let _started = false;
     super({...options, onChange: (...args) => {
       if (_started){
@@ -186,8 +188,6 @@ export class Model extends falcor.Model{
     return {dispose: ()=> this.handlers = this.handlers.filter(fn)};
   }
 }
-
-export class Router extends FRouter{}
 
 export function routeByCollectionId(key, fetch){
   return {

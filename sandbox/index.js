@@ -1,5 +1,40 @@
-import {App} from '../examples/ajax';
-import React from 'react';
+import request from 'superagent';
+import Router from 'falcor-router';
+import falcor from 'falcor';
 
-console.log(React.renderToString(<App/>));
+// a 'service' that fetches user details from github
+function user(id){
+  return new Promise((resolve, reject) =>
+    request.get(`https://api.github.com/users/${id}`).end((err, res) =>
+      err ? reject(err) : resolve(res.body)));
+}
 
+var model = new falcor.Model({
+  source: new Router([{
+    // define a single route corresponding to the above service
+    route: 'users[{keys:ids}]',
+    get: async function (pathSet){
+      let responses = await Promise.all(pathSet.ids.map(user));
+      return pathSet.ids.map((id, i) =>
+        ({path: ['users', id],  value: responses[i]}));
+    }
+  }])
+});
+
+console.log(model.getCache()); // empty, all good
+
+model.get(`users.threepointone['id', 'url', 'name']`)
+  .subscribe(function(json){
+
+    try {
+      console.log(model.getCache());
+    }
+    catch (e){
+      // throws error
+      // Maximum call stack size exceeded
+      console.error(e);
+    }
+
+  }, function(error){
+    console.error(error);
+  });

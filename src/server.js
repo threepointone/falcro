@@ -7,7 +7,6 @@ export async function renderToString(el, model){
   // we render to string once so the model gets primed with all the queries it would have received
   ReactDOMServer.renderToString(el);
 
-
   let queries = [...model.queries.values()];
   model.stopCaching();
 

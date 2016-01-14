@@ -13,7 +13,7 @@ function App(){
 function Counter(){
   return <Get query='count'>{
     ({count, $}) =>
-      <div onClick={()=> $.setValue('count', count + 1)}>
+      <div onClick={() => $.setValue('count', count + 1)}>
         clicked {count} times
       </div>
   }</Get>;

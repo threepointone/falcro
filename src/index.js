@@ -159,7 +159,9 @@ export class Model extends falcor.Model{
   handlers = [];
   queries = new Set();
   __caching__ = false;
-  constructor(options){
+  constructor(options = {}){
+    // this weird bit because onChange fires synchronously once inside the constructor
+    // we discard the first event, and expose .listen to get back some sanity
     let _change = options.onChange || (() => {});
     let _started = false;
     super({...options, onChange: (...args) => {

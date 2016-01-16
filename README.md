@@ -50,7 +50,7 @@ Root
 Get
 ---
 
-- query - falcor model query. accepts [falcor-path-syntax](https://www.npmjs.com/package/falcor-path-syntax) or [falcor-graph-syntax](https://www.npmjs.com/package/falcor-graph-syntax)
+- query - falcor model query. accepts [falcor-path-syntax](https://www.npmjs.com/package/falcor-path-syntax)
 - children - a function, that will receive, on render -
   - ...value - ie, the result of the query
   - error - if errored
@@ -75,7 +75,6 @@ todo
 *so much*
 - refreshing *only* the components that change
 - streaming results
-- server side rendering
 - redux/router scenarios (reduce/rewind/replay/etc)
 - shallow render testing
 - idents

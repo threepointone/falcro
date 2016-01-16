@@ -15,8 +15,7 @@
   "author": "Sunil Pai <threepointone@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "babel-runtime": "^6.3.19",
-    "falcor-graph-syntax": "^1.0.3"
+    "babel-runtime": "^6.3.19"
   },
   "devDependencies": {
     "babel": "^6.3.26",

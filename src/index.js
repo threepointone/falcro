@@ -43,7 +43,11 @@ function aget(paths, done){
 // 'Get' as a component
 export class Get extends Component{
   static propTypes = {
-    query: PropTypes.string.isRequired
+    query: PropTypes.string.isRequired,
+    select: PropTypes.func.isRequired
+  };
+  static defaultProps = {
+    select: x => x
   };
 
   static contextTypes = {
@@ -93,7 +97,7 @@ export class Get extends Component{
   getValue(){
     try {
       this.context.falcor.cacheQuery(this.props.query);
-      return this.context.falcor::get([this.props.query]);
+      return this.props.select(this.context.falcor::get([this.props.query]));
     }
     catch (error){
       return {error};
